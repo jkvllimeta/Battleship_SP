@@ -1,0 +1,135 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package battleship_sp;
+
+import java.util.Arrays;
+import java.util.Scanner;
+/**
+ *
+ * @author Joseph
+ */
+public class Battleship_SP {
+
+    /**
+     * @param args the command line arguments
+     */
+    
+    static Scanner a = new Scanner(System.in);
+    static int player1Attacks = 10;
+    static int player2Attacks = 10;
+    
+    static int player1Units = 5;
+    static int player2Units = 5;
+    
+    static int carrierLife = 5;
+    static int battleshipLife = 4;
+    static int cruiserLife = 3;
+    static int submarineLife = 2;
+    static int destroyerLife = 1;
+    
+    static int kill = 0;
+    
+    
+    public static void main(String[] args) {
+        // TODO code application logic here
+        String[][] gameBoard = new String[8][8];
+        initializeGameBoard(gameBoard);
+        
+        int rowPlace = 0;
+        int colPlace = 0;
+        
+        do{
+            System.out.println("Please enter a row (1-8) to place your ship on: ");
+            rowPlace = a.nextInt()-1;
+        } while(rowPlace < 0 || rowPlace > 7);
+        
+        
+        
+        do {
+            System.out.println("Please enter a column (1-8) to place your ship on: ");
+            colPlace = a.nextInt()-1;
+        } while(colPlace < 0 || colPlace > 7);
+        
+        while (player1Attacks > 0 || kill == 0){
+        initializeGameBoard(gameBoard);
+        placeShip(gameBoard, rowPlace, colPlace);
+        attackShip(gameBoard);
+        gameCheck(player1Attacks, kill);
+        printBoardStatus(gameBoard);
+        }
+        
+    }
+    
+    
+    
+    public static void initializeGameBoard (String[][] gameBoard){
+        
+        for(int i = 0; i < gameBoard.length; i++){
+            for(int j = 0; j < gameBoard[0].length; j++){
+                gameBoard[i][j] = "w";
+            }
+        }
+    }
+    
+    
+    public static void printBoardStatus(String[][] gameBoard){
+        
+        for(int i = 0; i < gameBoard.length; i++){
+            for(int j = 0; j < gameBoard[0].length; j++){
+                System.out.print(gameBoard[i][j] + " ");
+            }
+            System.out.println("");
+        }
+    }
+    
+    public static void placeShip(String[][] gameBoard, int row, int col){
+        gameBoard[row][col] = "B";
+    }
+    
+    public static void attackShip(String[][] gameBoard){
+        System.out.println("Choose a space to attack.");
+        System.out.println("Number of attacks left: " + player1Attacks);
+        int rowAttack = 0;
+        int colAttack = 0;
+        
+        do{
+            System.out.println("Please enter a row (1-8): ");
+            rowAttack = a.nextInt()-1;
+        } while(rowAttack < 0 || rowAttack > 7);
+        
+        
+        
+        do {
+            System.out.println("Please enter a column (1-8): ");
+            colAttack = a.nextInt()-1;
+        } while(colAttack < 0 || colAttack > 7);
+        
+        if(gameBoard[rowAttack][colAttack] == "B"){
+            kill++;
+            System.out.println("You have sunk a battleship");
+            gameBoard[rowAttack][colAttack] = "K";
+        } else {
+            System.out.println("You missed! Try again!");
+            gameBoard[rowAttack][colAttack] = "X";
+        }
+        
+        player1Attacks--;
+    }
+    
+    public static void gameCheck (int attacks, int kill){
+        if(attacks == 0){
+            System.out.println("You are out of attacks. Restart the game.");
+            System.exit(0);
+        } else if (kill == 1) {
+            System.out.println("You win the game!");
+            System.exit(0);
+        } else {
+            System.out.println("Prepare for the next turn.");
+        }
+    }
+    
+    
+}
