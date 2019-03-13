@@ -32,48 +32,46 @@ public class Battleship_SP {
     
     static int kill = 0;
     
+    static int turnCounter = 2;
+    
+
     
     public static void main(String[] args) {
         // TODO code application logic here
-        String[][] gameBoard = new String[8][8];
-        initializeGameBoard(gameBoard);
         
-        int rowPlace = 0;
-        int colPlace = 0;
+        Player p1 = new Player();
+        Player p2 = new Player();
         
-        do{
-            System.out.println("Please enter a row (1-8) to place your ship on: ");
-            rowPlace = a.nextInt()-1;
-        } while(rowPlace < 0 || rowPlace > 7);
+        p1.initializeGameBoard();
+        p2.initializeGameBoard();
+        //initializeGameBoard(gameBoard);
         
+        System.out.println("Player 1: Place your Ship");
+        p1.placeShip();
+        printBoardStatus(p1.gameBoard);
         
+        System.out.println("Player 2: Place your Ship");
+        p2.placeShip();
+        printBoardStatus(p2.gameBoard);
         
-        do {
-            System.out.println("Please enter a column (1-8) to place your ship on: ");
-            colPlace = a.nextInt()-1;
-        } while(colPlace < 0 || colPlace > 7);
-        
-        while (player1Attacks > 0 || kill == 0){
-        initializeGameBoard(gameBoard);
-        placeShip(gameBoard, rowPlace, colPlace);
-        attackShip(gameBoard);
-        gameCheck(player1Attacks, kill);
-        printBoardStatus(gameBoard);
+        while (p1.ammunition + p2.ammunition > 0 || kill == 0){
+        //initializeGameBoard(gameBoard);
+        //placeShip(gameBoard, rowPlace, colPlace);
+        if (turnCounter % 2 == 0){
+        System.out.println("Player 1's Turn:");
+        p1.attackShip(p2.gameBoard);
+        gameCheck(p1.ammunition, p1.killCount);
+        printBoardStatus(p2.gameBoard);
+        } else {
+        System.out.println("Player 2's Turn:");
+        p2.attackShip(p1.gameBoard);
+        gameCheck(p2.ammunition, p2.killCount);
+        printBoardStatus(p1.gameBoard);
         }
         
+        turnCounter++;
     }
-    
-    
-    
-    public static void initializeGameBoard (String[][] gameBoard){
-        
-        for(int i = 0; i < gameBoard.length; i++){
-            for(int j = 0; j < gameBoard[0].length; j++){
-                gameBoard[i][j] = "w";
-            }
-        }
-    }
-    
+}
     
     public static void printBoardStatus(String[][] gameBoard){
         
@@ -84,40 +82,7 @@ public class Battleship_SP {
             System.out.println("");
         }
     }
-    
-    public static void placeShip(String[][] gameBoard, int row, int col){
-        gameBoard[row][col] = "B";
-    }
-    
-    public static void attackShip(String[][] gameBoard){
-        System.out.println("Choose a space to attack.");
-        System.out.println("Number of attacks left: " + player1Attacks);
-        int rowAttack = 0;
-        int colAttack = 0;
-        
-        do{
-            System.out.println("Please enter a row (1-8): ");
-            rowAttack = a.nextInt()-1;
-        } while(rowAttack < 0 || rowAttack > 7);
-        
-        
-        
-        do {
-            System.out.println("Please enter a column (1-8): ");
-            colAttack = a.nextInt()-1;
-        } while(colAttack < 0 || colAttack > 7);
-        
-        if(gameBoard[rowAttack][colAttack] == "B"){
-            kill++;
-            System.out.println("You have sunk a battleship");
-            gameBoard[rowAttack][colAttack] = "K";
-        } else {
-            System.out.println("You missed! Try again!");
-            gameBoard[rowAttack][colAttack] = "X";
-        }
-        
-        player1Attacks--;
-    }
+   
     
     public static void gameCheck (int attacks, int kill){
         if(attacks == 0){
