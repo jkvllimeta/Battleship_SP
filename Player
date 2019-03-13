@@ -1,0 +1,89 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package battleship_sp;
+
+import java.util.Scanner;
+/**
+ *
+ * @author Joseph
+ */
+public class Player {
+    
+    Scanner a = new Scanner(System.in);
+    Scanner b = new Scanner(System.in);
+    
+    int ammunition = 10;
+    int shipNo = 5;
+    int killCount = 0;
+    
+    String[][] gameBoard = new String[8][8];
+    
+    
+    
+    public void initializeGameBoard (){
+        
+        for(int i = 0; i < this.gameBoard.length; i++){
+            for(int j = 0; j < this.gameBoard[0].length; j++){
+                this.gameBoard[i][j] = "w";
+            }
+        }
+    }
+    
+    
+    public void placeShip() {
+        
+        int rowPlace = 0;
+        int colPlace = 0;
+        
+        do{
+            System.out.println("Please enter a row (1-8) to place your ship on: ");
+            rowPlace = a.nextInt()-1;
+        } while(rowPlace < 0 || rowPlace > 7);
+        
+        do {
+            System.out.println("Please enter a column (1-8) to place your ship on: ");
+            colPlace = b.nextInt()-1;
+        } while(colPlace < 0 || colPlace > 7);
+        
+        this.gameBoard[rowPlace][colPlace] = "B";
+    }
+    
+    
+    public void attackShip(String[][] enemyBoard){
+    
+        System.out.println("Choose a space to attack.");
+        System.out.println("Number of attacks left: " + this.ammunition);
+        int rowAttack = 0;
+        int colAttack = 0;
+        
+        do{
+            System.out.println("Please enter a row (1-8): ");
+            rowAttack = a.nextInt()-1;
+        } while(rowAttack < 0 || rowAttack > 7);
+        
+        
+        do {
+            System.out.println("Please enter a column (1-8): ");
+            colAttack = b.nextInt()-1;
+        } while(colAttack < 0 || colAttack > 7);
+        
+        
+        if(enemyBoard[rowAttack][colAttack] == "B"){
+            this.killCount++;
+            System.out.println("You have sunk a battleship");
+            enemyBoard[rowAttack][colAttack] = "K";
+        } else {
+            System.out.println("You missed! Try again!");
+            enemyBoard[rowAttack][colAttack] = "X";
+        }
+        
+        this.ammunition--;
+    }
+    
+    
+    
+    
+}
